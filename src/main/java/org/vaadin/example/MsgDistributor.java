@@ -32,9 +32,15 @@ public class MsgDistributor {
 
     public void distribute(String body) {
         synchronized (activeUIs) {
+            HashSet<MyUI> detachedUIs = new HashSet<>();
             activeUIs.parallelStream().forEach(ui -> {
-                ui.showMessage(body);
+                try {
+                    ui.showMessage(body);
+                } catch (com.vaadin.ui.UIDetachedException e) {
+                    detachedUIs.add(ui);
+                }
             });
+            activeUIs.removeAll(detachedUIs);
         }
     }
 
