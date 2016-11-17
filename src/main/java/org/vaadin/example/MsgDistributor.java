@@ -4,9 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.enterprise.context.ApplicationScoped;
+import javax.ejb.Singleton;
 
-@ApplicationScoped
+@Singleton
 public class MsgDistributor {
 
     private final Logger log = Logger.getLogger(getClass().getName());
