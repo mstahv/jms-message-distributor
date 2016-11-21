@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import javax.jms.TextMessage;
 
 @MessageDriven(activationConfig = {
     @ActivationConfigProperty(propertyName = "clientId", propertyValue = Config.JMSTOPIC),
@@ -27,8 +28,11 @@ public class JMSListener implements MessageListener {
     @Override
     public void onMessage(Message message) {
         try {
-            String body = message.getBody(String.class);
-            distributor.distribute(body);
+            if (message instanceof TextMessage) {
+                TextMessage textMessage = (TextMessage) message;
+                String body = textMessage.getText();
+                distributor.distribute(body);
+            }
         } catch (JMSException ex) {
             Logger.getLogger(JMSListener.class.getName()).log(Level.SEVERE, null, ex);
         }

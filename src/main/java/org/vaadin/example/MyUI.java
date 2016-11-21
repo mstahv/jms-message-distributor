@@ -8,10 +8,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import java.util.Random;
-import javax.annotation.Resource;
 import javax.inject.Inject;
-import javax.jms.JMSContext;
-import javax.jms.Topic;
 import org.vaadin.viritin.button.PrimaryButton;
 import org.vaadin.viritin.fields.MTable;
 import org.vaadin.viritin.fields.MTextField;
@@ -21,15 +18,12 @@ import org.vaadin.viritin.layouts.MVerticalLayout;
 @Push
 @Theme("valo")
 public class MyUI extends UI {
-
+    
     @Inject
-    private JMSContext jmsContext;
-
-    @Resource(lookup = Config.JMSTOPIC)
-    private Topic topic;
+    private JmsMessageSender sender;
 
     public void send(String msg) {
-        jmsContext.createProducer().send(topic, msg);
+        sender.sendMessage(msg);
     }
 
     @Inject
